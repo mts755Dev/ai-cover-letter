@@ -25,6 +25,10 @@ const Content = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText(coverLetter);
     alert('Cover letter copied to clipboard!');
+    setName('');
+    setExpertise('');
+    setJobDescription('');
+    setCoverLetter('');
   };
 
   return (
