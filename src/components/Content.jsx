@@ -39,7 +39,7 @@ const Content = () => {
   return (
     <div className="d-flex align-items-center">
       <Container>
-        <Card className="my-3 mx-auto">
+        <Card className="my-3 mt-4 mx-auto">
           <Card.Body className="mt-3 mb-3">
             <Row>
               <Col md={6}>
