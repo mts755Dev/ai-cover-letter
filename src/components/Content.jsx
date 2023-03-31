@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
-import { generateCoverLetter } from "../openai"; // import GPT-3 API function
+import { Container, Row, Col, Form, Button, Card, Spinner } from "react-bootstrap";
+import { generateCoverLetter } from "../openai";
 
 const Content = () => {
   const [name, setName] = useState('');
   const [expertise, setExpertise] = useState('');
   const [jobDescription, setJobDescription] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const generatedCoverLetter = await generateCoverLetter(name, expertise, jobDescription);
@@ -20,6 +23,8 @@ const Content = () => {
       console.error(error);
       alert('Error generating cover letter!');
     }
+
+    setIsLoading(false);
   };
 
   const handleCopy = () => {
@@ -81,14 +86,21 @@ const Content = () => {
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Cover Letter</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={10}
-                    readOnly
-                    value={coverLetter}
-                  />
+                  {isLoading ? (
+                    <div className="d-flex align-items-center">
+                      <Spinner animation="border" variant="primary" />
+                      <span className="ml-2">Generating cover letter...</span>
+                    </div>
+                  ) : (
+                    <Form.Control
+                      as="textarea"
+                      rows={10}
+                      readOnly
+                      value={coverLetter}
+                    />
+                  )}
                 </Form.Group>
-                <Button className="mt-3" variant="secondary" onClick={handleCopy}>
+                <Button className="mt-3" variant="primary" onClick={handleCopy} disabled={!coverLetter}>
                   <FontAwesomeIcon icon={faCopy} />
                   &nbsp;Copy Cover Letter
                 </Button>
